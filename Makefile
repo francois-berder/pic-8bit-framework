@@ -1,5 +1,9 @@
 all: framework
 
+ifndef CHIP
+$(error "CHIP variable must be defined, e.g. CHIP=18f4550")
+endif
+
 MCU := pic$(CHIP)
 
 include mcu/$(MCU)/Makefile.mcu
