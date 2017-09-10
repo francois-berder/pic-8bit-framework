@@ -20,6 +20,11 @@
 #include <stdint.h>
 
 /**
+ * @defgroup mcu MCU
+ * @{
+ */
+
+/**
  * @brief Initialise the MCU
  */
 void mcu_init(void);
@@ -45,5 +50,7 @@ void mcu_idle(void);
  * @brief Set MCU to sleep mode
  */
 void mcu_sleep(void);
+
+/** @} */
 
 #endif
