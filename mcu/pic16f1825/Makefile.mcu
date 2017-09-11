@@ -1,1 +1,2 @@
-SOURCES += mcu/pic$(CHIP)/mcu.c
+SOURCES += mcu/pic$(CHIP)/mcu.c \
+           mcu/pic$(CHIP)/periph/gpio.c
