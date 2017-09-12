@@ -51,6 +51,16 @@ void mcu_idle(void);
  */
 void mcu_sleep(void);
 
+/**
+ * @brief Enable interrupts
+ */
+inline void mcu_enable_interrupts(void);
+
+/**
+ * @brief Disable interrupts
+ */
+inline void mcu_disable_interrupts(void);
+
 /** @} */
 
 #endif
