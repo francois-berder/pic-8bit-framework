@@ -36,12 +36,13 @@ void mcu_reset(void)
 
 void mcu_idle(void)
 {
-    /* @todo Not implemented yet */
+    /* idle mode does not exist on this device */
+    assert(0);
 }
 
 void mcu_sleep(void)
 {
-    /* @todo Not implemented yet */
+    asm("sleep");
 }
 
 inline void mcu_enable_interrupts(void)
