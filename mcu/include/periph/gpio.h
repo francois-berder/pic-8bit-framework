@@ -28,6 +28,12 @@
  /** Define a pin from its port and index */
 #define GPIO_PIN(PORT,INDEX)    (((PORT) << 4) | ((INDEX) & 0xF))
 
+enum GPIO_TRIGGER {
+    GPIO_RISING = 0x1,
+    GPIO_FALLING = 0x2,
+    GPIO_EDGE = 0x3
+};
+
 /**
  * @brief Configure a gpio as a digital output
  *
@@ -42,6 +48,15 @@ void gpio_init_out(uint8_t pin, uint8_t value);
  * @param[in] pin
  */
 void gpio_init_in(uint8_t pin);
+
+/**
+ * @brief Configure a IRQ on a gpio
+ *
+ * @param[in] pin
+ * @param[in] trigger
+ * @param[in] callback
+ */
+void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void));
 
 /**
  * @brief Read value of gpio
