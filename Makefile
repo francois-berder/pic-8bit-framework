@@ -8,7 +8,7 @@ MCU := pic$(CHIP)
 
 include mcu/$(MCU)/Makefile.mcu
 
-INCLUDES := -Imcu/include -Imcu/include/periph
+INCLUDES := -Imcu/include -Imcu/include/periph -Imcu/$(MCU)
 OBJDIR := obj/$(MCU)/
 OUTDIR := bin/$(MCU)/
 
