@@ -14,6 +14,7 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <xc.h>
 #include "mcu.h"
 
 
@@ -41,4 +42,16 @@ void mcu_idle(void)
 void mcu_sleep(void)
 {
     /* @todo Not implemented yet */
+}
+
+inline void mcu_enable_interrupts(void)
+{
+    /* Set GIE flag in INTCON register */
+    asm("bsf INTCON, 7");
+}
+
+inline void mcu_disable_interrupts(void)
+{
+    /* Clear GIE flag in INTCON register */
+    asm("bcf INTCON, 7");
 }
