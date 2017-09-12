@@ -30,6 +30,15 @@
 void mcu_init(void);
 
 /**
+ * @brief Register an interrupt handler
+ *
+ * @param[in] cond
+ * @param[in] handler
+ * @param[in] arg
+ */
+void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void*), void *arg);
+
+/**
  * @brief Busy loop MCU
  *
  * @param[in] nanoseconds
