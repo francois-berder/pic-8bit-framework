@@ -18,6 +18,7 @@
 #include <xc.h>
 #include "board.h"
 #include "mcu.h"
+#include "periph/timer0.h"
 
 #ifndef MAX_INTERRUPT_COUNT
 #define MAX_INTERRUPT_COUNT     (8U)
@@ -47,6 +48,7 @@ void mcu_init(void)
     asm("bsf INTCON, 6");
 
     mcu_enable_interrupts();
+    timer0_configure();
 }
 
 void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *arg)
@@ -59,10 +61,10 @@ void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *
     ++intr_count;
 }
 
-void mcu_delay(uint32_t nanoseconds)
+void mcu_delay(uint32_t ticks)
 {
-    (void)nanoseconds;
-    /* @todo Not implemented yet */
+    uint32_t now = timer0_get_tick_count();
+    while (timer0_get_tick_count() - now < ticks) {}
 }
 
 void mcu_reset(void)
