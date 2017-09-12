@@ -41,9 +41,9 @@ void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void*), void 
 /**
  * @brief Busy loop MCU
  *
- * @param[in] nanoseconds
+ * @param[in] ticks Number of timer0 ticks to wait
  */
-void mcu_delay(uint32_t nanoseconds);
+void mcu_delay(uint32_t ticks);
 
 /**
  * @brief Reset MCU
