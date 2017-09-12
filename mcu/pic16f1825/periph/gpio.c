@@ -14,7 +14,9 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <xc.h>
+#include "mcu.h"
 #include "periph/gpio.h"
 
 #define GPIO_PORT(pin)      ((pin) >> 4)
@@ -50,6 +52,27 @@ static struct gpio_regs_t ports[] = {
     }
 };
 
+static uint8_t intr_registered = 0;
+static void (*irq_callbacks[6])(void);
+
+static uint8_t gpio_irq_cond(void)
+{
+    return IOCAF && (INTCON & _INTCON_IOCIE_MASK);
+}
+
+static void gpio_irq_handler(void *arg)
+{
+    (void)arg;
+    uint8_t i;
+    uint8_t index = 0;
+    for (i = 1; i < (1 << 6); i <<= 1, ++index) {
+        if (IOCAF & i) {
+            irq_callbacks[index]();
+            IOCAF &= ~i;
+        }
+    }
+}
+
 void gpio_init_out(uint8_t pin, uint8_t value)
 {
     ANSEL(pin) &= ~(1 << GPIO_INDEX(pin));
@@ -61,6 +84,39 @@ void gpio_init_in(uint8_t pin)
 {
     ANSEL(pin) &= ~(1 << GPIO_INDEX(pin));
     TRIS(pin) |= 1 << GPIO_INDEX(pin);
+}
+
+void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
+{
+    /* Interrupt on Change only on port A */
+    assert(GPIO_PORT(pin) == 0);
+
+    uint8_t index = GPIO_INDEX(pin);
+
+    gpio_init_in(pin);
+
+    mcu_disable_interrupts();
+    switch(trigger) {
+    case GPIO_RISING:
+        IOCAP |= 1U << index;
+        break;
+    case GPIO_FALLING:
+        IOCAN |= 1U << index;
+        break;
+    case GPIO_EDGE:
+        IOCAP |= 1U << index;
+        IOCAN |= 1U << index;
+        break;
+    }
+
+    irq_callbacks[index] = callback;
+    IOCAF &= ~(1U << index);
+    if (intr_registered == 0) {
+        intr_registered++;
+        mcu_register_intr_handler(gpio_irq_cond, gpio_irq_handler, 0);
+    }
+    INTCON |= _INTCON_IOCIE_MASK;
+    mcu_enable_interrupts();
 }
 
 uint8_t gpio_read(uint8_t pin)
