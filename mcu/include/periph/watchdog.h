@@ -29,8 +29,10 @@
  * @brief Configure watchdog prescaler
  *
  * This function does not enable the watchdog.
+ *
+ * @param[in] period
  */
-void watchdog_configure(void);
+void watchdog_configure(uint8_t period);
 
 /**
  * @brief Enable watchdog
