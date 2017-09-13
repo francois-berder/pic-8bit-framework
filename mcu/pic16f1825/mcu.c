@@ -48,7 +48,6 @@ void mcu_init(void)
     asm("bsf INTCON, 6");
 
     mcu_enable_interrupts();
-    timer0_configure();
 }
 
 void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *arg)
