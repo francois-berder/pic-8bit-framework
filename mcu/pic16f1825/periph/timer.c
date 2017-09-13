@@ -14,8 +14,10 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <xc.h>
 #include "mcu.h"
+#include "periph_conf.h"
 #include "periph/timer.h"
 
 static uint32_t ticks[3];
@@ -66,6 +68,10 @@ void timer_configure(uint8_t num,
                      uint8_t period,
                      void(*callback)(void))
 {
+    assert(num == 2 || num == 4 || num == 6);
+    assert(prescaler <= TIMER2_PRESCALER_64);
+    assert(postcaler <= TIMER2_POSTCALER_16);
+
     switch (num) {
     case 2:
         T2CON = prescaler & _T2CON_T2CKPS_MASK;
