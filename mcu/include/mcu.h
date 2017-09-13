@@ -39,6 +39,11 @@ void mcu_init(void);
 void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void*), void *arg);
 
 /**
+ * @return Clock frequency of the MCU. If frequency is unknown  0 is returned.
+ */
+uint32_t mcu_get_clock_frequency(void);
+
+/**
  * @brief Busy loop MCU
  *
  * @param[in] ticks Number of timer0 ticks to wait
