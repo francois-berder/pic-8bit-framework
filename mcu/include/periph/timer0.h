@@ -27,8 +27,10 @@
 
 /**
  * @brief Configure timer0
+ *
+ * @param[in] prescaler
  */
-void timer0_configure(void);
+void timer0_configure(uint8_t prescaler);
 
 /**
  * @return Number of overflows
