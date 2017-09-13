@@ -30,7 +30,7 @@ void uart_configure(uint8_t num, uint32_t baudrate)
      * baudrate = ----------------
      *              4 * (BRG + 1)
      */
-    uint32_t divisor = CLOCK_FREQUENCY;
+    uint32_t divisor = mcu_get_clock_frequency();
     divisor >>= 2;
     divisor /= baudrate;
     --divisor;
