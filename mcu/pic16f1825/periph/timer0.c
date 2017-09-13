@@ -15,7 +15,6 @@
  */
 
 #include <xc.h>
-#include "board.h"
 #include "mcu.h"
 #include "periph/timer0.h"
 
@@ -35,7 +34,7 @@ static uint8_t timer0_handler(void *arg)
     INTCON &= ~_INTCON_TMR0IF_MASK;
 }
 
-void timer0_configure(void)
+void timer0_configure(uint8_t prescaler)
 {
     /* Disable interrupt */
     INTCON &= ~_INTCON_TMR0IE_MASK;
@@ -44,13 +43,14 @@ void timer0_configure(void)
     OPTION_REG &= ~_OPTION_REG_TMR0CS_MASK;
 
     /* Configure timer prescaler */
-#ifdef TIMER0_PRESCALER
-    OPTION_REG &= ~_OPTION_REG_PS_MASK;
-    OPTION_REG |= (TIMER0_PRESCALER << _OPTION_REG_PS_POSITION);
-    OPTION_REG &= ~_OPTION_REG_PSA_MASK;
-#elif
-    OPTION_REG |= _OPTION_REG_PSA_MASK;
-#endif
+    if (prescaler == 0) {
+        OPTION_REG |= _OPTION_REG_PSA_MASK;
+    } else {
+        --prescaler;
+        OPTION_REG &= ~_OPTION_REG_PS_MASK;
+        OPTION_REG |= (prescaler << _OPTION_REG_PS_POSITION) & _OPTION_REG_PS_MASK;
+        OPTION_REG &= ~_OPTION_REG_PSA_MASK;
+    }
 
     ticks = 0;
     TMR0 = 0;
