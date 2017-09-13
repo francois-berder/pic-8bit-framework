@@ -15,18 +15,13 @@
  */
 
 #include <xc.h>
-#include "board.h"
 #include "periph/watchdog.h"
 
-/* By default, set watchdog timer period to 1 second */
-#ifndef WATCHDOG_PRESCALER
-#define WATCHDOG_PRESCALER  (0b01010)
-#endif
 
-void watchdog_configure(void)
+void watchdog_configure(uint8_t period)
 {
     WDTCON &= ~ _WDTCON_WDTPS_MASK;
-    WDTCON |= (WATCHDOG_PRESCALER << _WDTCON_WDTPS_POSITION);
+    WDTCON |= (period << _WDTCON_WDTPS_POSITION);
 }
 
 void watchdog_enable(void)
