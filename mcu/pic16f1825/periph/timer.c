@@ -45,21 +45,24 @@ static uint8_t timer6_cond(void)
 static void timer2_handler(void)
 {
     ticks[0]++;
-    callbacks[0]();
+    if (callbacks[0])
+        callbacks[0]();
     PIR1 &= ~_PIR1_TMR2IF_MASK;
 }
 
 static void timer4_handler(void)
 {
     ticks[1]++;
-    callbacks[1]();
+    if (callbacks[1])
+        callbacks[1]();
     PIR3 &= ~_PIR3_TMR4IF_MASK;
 }
 
 static void timer6_handler(void)
 {
     ticks[2]++;
-    callbacks[2]();
+    if (callbacks[2])
+        callbacks[2]();
     PIR3 &= ~_PIR3_TMR6IF_MASK;
 }
 
