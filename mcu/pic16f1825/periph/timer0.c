@@ -14,8 +14,10 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <xc.h>
 #include "mcu.h"
+#include "periph_conf.h"
 #include "periph/timer0.h"
 
 static uint32_t ticks;
@@ -36,6 +38,8 @@ static uint8_t timer0_handler(void *arg)
 
 void timer0_configure(uint8_t prescaler)
 {
+    assert(prescaler <= TIMER0_PRESCALER_256);
+
     /* Disable interrupt */
     INTCON &= ~_INTCON_TMR0IE_MASK;
 
@@ -43,7 +47,7 @@ void timer0_configure(uint8_t prescaler)
     OPTION_REG &= ~_OPTION_REG_TMR0CS_MASK;
 
     /* Configure timer prescaler */
-    if (prescaler == 0) {
+    if (prescaler == TIMER0_PRESCALER_1) {
         OPTION_REG |= _OPTION_REG_PSA_MASK;
     } else {
         --prescaler;

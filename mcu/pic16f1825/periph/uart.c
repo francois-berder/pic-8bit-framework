@@ -14,13 +14,15 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <xc.h>
-#include "board.h"
+#include "mcu.h"
 #include "periph/uart.h"
 
 
 void uart_configure(uint8_t num, uint32_t baudrate)
 {
+    assert(num == 0);
     uart_disable(num);
 
     /*
@@ -45,7 +47,7 @@ void uart_configure(uint8_t num, uint32_t baudrate)
 
 void uart_write(uint8_t num, const void *data, uint16_t count)
 {
-    (void)num;
+    assert(num == 0);
     const uint8_t *buffer = (const uint8_t *)data;
     while (count) {
         TXREG = *buffer++;
@@ -62,7 +64,7 @@ void uart_write(uint8_t num, const void *data, uint16_t count)
 
 void uart_read(uint8_t num, void *data, uint16_t count)
 {
-    (void)num;
+    assert(num == 0);
     uint8_t *buffer = (uint8_t *)data;
 
     while (count) {
@@ -76,7 +78,7 @@ void uart_read(uint8_t num, void *data, uint16_t count)
 
 void uart_enable(uint8_t num)
 {
-    (void)num;
+    assert(num == 0);
 
     RCSTA |= _RCSTA_CREN_MASK | _RCSTA_SPEN_MASK;
     TXSTA |= _TXSTA_TXEN_MASK;
@@ -84,7 +86,7 @@ void uart_enable(uint8_t num)
 
 void uart_disable(uint8_t num)
 {
-    (void)num;
+    assert(num == 0);
 
     RCSTA &= ~(_RCSTA_CREN_MASK | _RCSTA_SPEN_MASK);
     TXSTA &= ~_TXSTA_TXEN_MASK;

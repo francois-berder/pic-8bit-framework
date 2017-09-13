@@ -14,12 +14,16 @@
  * along with pic18-framework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <xc.h>
+#include "periph_conf.h"
 #include "periph/watchdog.h"
 
 
 void watchdog_configure(uint8_t period)
 {
+    assert(period <= WATCHDOG_PERIOD_256S);
+
     WDTCON &= ~ _WDTCON_WDTPS_MASK;
     WDTCON |= (period << _WDTCON_WDTPS_POSITION);
 }
