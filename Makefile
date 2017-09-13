@@ -1,5 +1,3 @@
-all: framework
-
 ifndef CHIP
 $(error "CHIP variable must be defined, e.g. CHIP=18f4550")
 endif
@@ -11,14 +9,20 @@ include mcu/$(MCU)/Makefile.mcu
 INCLUDES := -Imcu/include -Imcu/include/periph -Imcu/$(MCU)
 OBJDIR := obj/$(MCU)/
 OUTDIR := bin/$(MCU)/
+debug: DEBUG = 1
 
-framework:
+all: release
+release: framework
+debug: framework
+
+framework: $(SOURCES)
 	@mkdir -p $(OBJDIR)
 	@mkdir -p $(OUTDIR)
-	xc8 --chip=$(CHIP) --output=lpp -oframework.lpp --warn=9 \
-	--objdir=$(OBJDIR) --outdir=$(OUTDIR) \
-	$(SOURCES) $(INCLUDES)
+	xc8 --chip=$(CHIP) --output=lpp -o$@.lpp --warn=9 $(CFLAGS) \
+		--objdir=$(OBJDIR) --outdir=$(OUTDIR) \
+		$(SOURCES) $(INCLUDES) $(if $(DEBUG),,-DNDEBUG)
 
+.PHONY: clean
 clean:
 	rm -Rf $(OBJDIR)
 	rm -Rf $(OUTDIR)
