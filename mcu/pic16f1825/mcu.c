@@ -16,7 +16,6 @@
 
 #include <assert.h>
 #include <xc.h>
-#include "board.h"
 #include "mcu.h"
 #include "periph/timer0.h"
 
@@ -58,6 +57,48 @@ void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *
     entries[intr_count].handler = handler;
     entries[intr_count].arg = arg;
     ++intr_count;
+}
+
+uint32_t mcu_get_clock_frequency(void)
+{
+    /* Assume we are using internal oscillator */
+
+    uint8_t select = (OSCCON & _OSCCON_IRCF_MASK) >> _OSCCON_IRCF_POSITION;
+    switch (select) {
+    case 0:
+    case 1:
+        return 31000;
+    case 2:
+    case 3:
+        return 31250;
+    case 4:
+        return 62500;
+    case 5:
+        return 125000;
+    case 6:
+        return 250000;
+    case 7:
+        return 500000;
+    case 8:
+        return 125000;
+    case 9:
+        return 250000;
+    case 10:
+        return 500000;
+    case 11:
+        return 1000000;
+    case 12:
+        return 2000000;
+    case 13:
+        return 4000000;
+    case 14:
+        /* Assume PLL is disabled */
+        return 8000000;
+    case 15:
+        return 16000000;
+    default:
+        return 0;
+    }
 }
 
 void mcu_delay(uint32_t ticks)
