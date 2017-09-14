@@ -20,9 +20,10 @@
 #include "periph_conf.h"
 #include "periph/timer.h"
 
-static uint32_t ticks[3];
+static volatile uint32_t ticks[3];
 static uint8_t intr_registered[3];
-static void(*callbacks[3])(void);
+typedef void(*timer_callback_t)(void);
+static volatile timer_callback_t callbacks[3];
 
 static uint8_t timer2_cond(void)
 {

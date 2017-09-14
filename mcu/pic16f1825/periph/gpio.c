@@ -53,7 +53,8 @@ static struct gpio_regs_t ports[] = {
 };
 
 static uint8_t intr_registered = 0;
-static void (*irq_callbacks[6])(void);
+typedef void(*irq_callback_t)(void);
+static volatile irq_callback_t callbacks[6];
 
 static uint8_t gpio_irq_cond(void)
 {
@@ -67,7 +68,7 @@ static void gpio_irq_handler(void *arg)
     uint8_t index = 0;
     for (i = 1; i < (1 << 6); i <<= 1, ++index) {
         if (IOCAF & i) {
-            irq_callbacks[index]();
+            callbacks[index]();
             IOCAF &= ~i;
         }
     }
@@ -111,7 +112,7 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
         break;
     }
 
-    irq_callbacks[index] = callback;
+    callbacks[index] = callback;
     IOCAF &= ~(1U << index);
     if (intr_registered == 0) {
         intr_registered++;
