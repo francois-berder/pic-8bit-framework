@@ -21,7 +21,6 @@
 #include "periph/timer0.h"
 
 static uint32_t ticks;
-static void(*timer_callback)(void);
 
 static uint8_t timer0_cond(void)
 {
