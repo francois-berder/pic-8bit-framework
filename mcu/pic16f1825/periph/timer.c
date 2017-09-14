@@ -97,7 +97,6 @@ void timer_configure(uint8_t num,
         break;
     }
 
-    mcu_disable_interrupts();
     switch (num) {
     case 2:
         if (intr_registered[0] == 0) {
@@ -124,7 +123,6 @@ void timer_configure(uint8_t num,
         PIE3 |= _PIE3_TMR6IE_MASK;
         break;
     }
-    mcu_enable_interrupts();
 }
 
 void timer_start(uint8_t num)

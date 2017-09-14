@@ -53,10 +53,12 @@ void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *
 {
     assert(intr_count < MAX_INTERRUPT_COUNT);
 
+    mcu_disable_interrupts();
     entries[intr_count].cond = cond;
     entries[intr_count].handler = handler;
     entries[intr_count].arg = arg;
     ++intr_count;
+    mcu_enable_interrupts();
 }
 
 uint32_t mcu_get_clock_frequency(void)
