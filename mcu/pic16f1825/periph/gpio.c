@@ -98,10 +98,12 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
     mcu_disable_interrupts();
     switch(trigger) {
     case GPIO_RISING:
+        IOCAN &= ~(1U << index);
         IOCAP |= 1U << index;
         break;
     case GPIO_FALLING:
         IOCAN |= 1U << index;
+        IOCAP &= ~(1U << index);
         break;
     case GPIO_EDGE:
         IOCAP |= 1U << index;
