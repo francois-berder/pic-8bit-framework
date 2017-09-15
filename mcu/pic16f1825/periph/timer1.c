@@ -33,7 +33,9 @@ static uint8_t timer1_cond(void)
 static void timer1_handler(void *arg)
 {
     (void)arg;
-    timer_callback();
+    if (timer_callback) {
+        timer_callback();
+    }
     PIR1 &= ~_PIR1_TMR1IF_MASK;
 }
 
