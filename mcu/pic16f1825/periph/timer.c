@@ -100,31 +100,48 @@ void timer_configure(uint8_t num,
         break;
     }
 
-    switch (num) {
-    case 2:
-        if (intr_registered[0] == 0) {
-            intr_registered[0]++;
-            mcu_register_intr_handler(timer2_cond, timer2_handler, 0);
+    if (callback != 0) {
+        switch (num) {
+        case 2:
+            if (intr_registered[0] == 0) {
+                intr_registered[0]++;
+                mcu_register_intr_handler(timer2_cond, timer2_handler, 0);
+            }
+            PIR1 &= ~_PIR1_TMR2IF_MASK;
+            PIE1 |= _PIE1_TMR2IE_MASK;
+            break;
+        case 4:
+            if (intr_registered[1] == 0) {
+                intr_registered[1]++;
+                mcu_register_intr_handler(timer4_cond, timer4_handler, 0);
+            }
+            PIR3 &= ~_PIR3_TMR4IF_MASK;
+            PIE3 |= _PIE3_TMR4IE_MASK;
+            break;
+        case 6:
+            if (intr_registered[2] == 0) {
+                intr_registered[2]++;
+                mcu_register_intr_handler(timer6_cond, timer6_handler, 0);
+            }
+            PIR3 &= ~_PIR3_TMR6IF_MASK;
+            PIE3 |= _PIE3_TMR6IE_MASK;
+            break;
         }
-        PIR1 &= ~_PIR1_TMR2IF_MASK;
-        PIE1 |= _PIE1_TMR2IE_MASK;
-        break;
-    case 4:
-        if (intr_registered[1] == 0) {
-            intr_registered[1]++;
-            mcu_register_intr_handler(timer4_cond, timer4_handler, 0);
+    } else {
+        switch (num) {
+        case 2:
+            PIR1 &= ~_PIR1_TMR2IF_MASK;
+            PIE1 &= ~_PIE1_TMR2IE_MASK;
+            break;
+        case 4:
+            PIR3 &= ~_PIR3_TMR4IF_MASK;
+            PIE3 &= ~_PIE3_TMR4IE_MASK;
+            break;
+        case 6:
+            PIR3 &= ~_PIR3_TMR6IF_MASK;
+            PIE3 &= ~_PIE3_TMR6IE_MASK;
+            break;
         }
-        PIR3 &= ~_PIR3_TMR4IF_MASK;
-        PIE3 |= _PIE3_TMR4IE_MASK;
-        break;
-    case 6:
-        if (intr_registered[2] == 0) {
-            intr_registered[2]++;
-            mcu_register_intr_handler(timer6_cond, timer6_handler, 0);
-        }
-        PIR3 &= ~_PIR3_TMR6IF_MASK;
-        PIE3 |= _PIE3_TMR6IE_MASK;
-        break;
     }
 }
 
