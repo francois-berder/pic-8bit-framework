@@ -81,18 +81,21 @@ void timer_configure(uint8_t num,
         T2CON = prescaler & _T2CON_T2CKPS_MASK;
         T2CON |= (postcaler << _T2CON_T2OUTPS_POSITION) & _T2CON_T2OUTPS_MASK;
         PR2 = period;
+        TMR2 = 0;
         callbacks[0] = callback;
         break;
     case 4:
         T4CON = prescaler & _T4CON_T4CKPS_MASK;
         T4CON |= (postcaler << _T4CON_T4OUTPS_POSITION) & _T4CON_T4OUTPS_MASK;
         PR4 = period;
+        TMR4 = 0;
         callbacks[1] = callback;
         break;
     case 6:
         T6CON = prescaler & _T6CON_T6CKPS_MASK;
         T6CON |= (postcaler << _T6CON_T6OUTPS_POSITION) & _T6CON_T6OUTPS_MASK;
         PR6 = period;
+        TMR6 = 0;
         callbacks[2] = callback;
         break;
     }
