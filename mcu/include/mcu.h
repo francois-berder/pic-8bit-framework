@@ -75,6 +75,11 @@ inline void mcu_enable_interrupts(void);
  */
 inline void mcu_disable_interrupts(void);
 
+/**
+ * @return Interrupt state
+ */
+inline uint8_t mcu_get_interrupt_state(void);
+
 /** @} */
 
 #endif
