@@ -36,7 +36,7 @@ void mcu_init(void);
  * @param[in] handler
  * @param[in] arg
  */
-void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void*), void *arg);
+void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void));
 
 /**
  * @return Clock frequency of the MCU. If frequency is unknown  0 is returned.
