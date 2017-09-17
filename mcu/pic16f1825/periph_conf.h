@@ -17,6 +17,16 @@
 #ifndef __PERIPH_CONF_H
 #define __PERIPH_CONF_H
 
+#include "mcu.h"
+
+#define __HAL_ENABLE_INTERRUPTS(__state) do {   \
+    if (__state) mcu_enable_interrupts();       \
+    } while (0)
+#define __HAL_DISABLE_INTERRUPTS(__state) do {  \
+    __state = mcu_get_interrupt_state();        \
+    mcu_disable_interrupts();                   \
+    } while(0)
+
 enum MCU_PORT {
     PORT_A = 0,
     /* No port B on PIC16F1825 */
