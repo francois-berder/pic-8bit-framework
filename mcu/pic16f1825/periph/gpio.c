@@ -62,9 +62,8 @@ static uint8_t gpio_irq_cond(void)
     return IOCAF && (INTCON & _INTCON_IOCIE_MASK);
 }
 
-static void gpio_irq_handler(void *arg)
+static void gpio_irq_handler(void)
 {
-    (void)arg;
     uint8_t i;
     uint8_t index = 0;
     for (i = 1; i < (1 << 6); i <<= 1, ++index) {
@@ -119,7 +118,7 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
     IOCAF &= ~(1U << index);
     if (intr_registered == 0) {
         intr_registered++;
-        mcu_register_intr_handler(gpio_irq_cond, gpio_irq_handler, 0);
+        mcu_register_intr_handler(gpio_irq_cond, gpio_irq_handler);
     }
     INTCON |= _INTCON_IOCIE_MASK;
     __HAL_ENABLE_INTERRUPTS(ctx);

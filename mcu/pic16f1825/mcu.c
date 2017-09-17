@@ -28,8 +28,7 @@ static uint8_t intr_count;
 
 struct interrupt_entry_t {
     uint8_t (*cond)(void);
-    void (*handler)(void*);
-    void *arg;
+    void (*handler)(void);
 };
 static struct interrupt_entry_t entries[MAX_INTERRUPT_COUNT];
 
@@ -38,7 +37,7 @@ static void interrupt mcu_intr_handler(void)
     unsigned int i;
     for (i = 0; i < intr_count; ++i) {
         if (entries[i].cond())
-            entries[i].handler(entries[i].arg);
+            entries[i].handler();
     }
 }
 
@@ -50,7 +49,7 @@ void mcu_init(void)
     mcu_enable_interrupts();
 }
 
-void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *arg)
+void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void))
 {
     uint8_t ctx;
     assert(intr_count < MAX_INTERRUPT_COUNT);
@@ -58,7 +57,6 @@ void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *
     __HAL_DISABLE_INTERRUPTS(ctx);
     entries[intr_count].cond = cond;
     entries[intr_count].handler = handler;
-    entries[intr_count].arg = arg;
     ++intr_count;
     __HAL_ENABLE_INTERRUPTS(ctx);
 }

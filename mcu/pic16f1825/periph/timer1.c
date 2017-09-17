@@ -30,9 +30,8 @@ static uint8_t timer1_cond(void)
         && PIR1 & _PIR1_TMR1IF_MASK;
 }
 
-static void timer1_handler(void *arg)
+static void timer1_handler(void)
 {
-    (void)arg;
     if (timer_callback) {
         timer_callback();
     }
@@ -50,7 +49,7 @@ void timer1_configure(uint8_t prescaler, void(*callback)(void))
     if (callback) {
         if (intr_registered == 0) {
             intr_registered++;
-            mcu_register_intr_handler(timer1_cond, timer1_handler, 0);
+            mcu_register_intr_handler(timer1_cond, timer1_handler);
         }
         PIR1 &= ~_PIR1_TMR1IF_MASK;
         PIE1 |= _PIE1_TMR1IE_MASK;

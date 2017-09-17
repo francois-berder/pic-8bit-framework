@@ -28,9 +28,8 @@ static uint8_t timer0_cond(void)
         && INTCON & _INTCON_TMR0IF_MASK;
 }
 
-static uint8_t timer0_handler(void *arg)
+static uint8_t timer0_handler(void)
 {
-    (void)arg;
     ++ticks;
     INTCON &= ~_INTCON_TMR0IF_MASK;
 }
@@ -59,7 +58,7 @@ void timer0_configure(uint8_t prescaler)
     TMR0 = 0;
 
     /* Register interrupt handler */
-    mcu_register_intr_handler(timer0_cond, timer0_handler, 0);
+    mcu_register_intr_handler(timer0_cond, timer0_handler);
 
     /* Enable interrupt */
     INTCON &= ~_INTCON_TMR0IF_MASK;
