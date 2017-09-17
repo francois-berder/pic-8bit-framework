@@ -136,3 +136,8 @@ inline void mcu_disable_interrupts(void)
     /* Clear GIE flag in INTCON register */
     asm("bcf INTCON, 7");
 }
+
+inline uint8_t mcu_get_interrupt_state(void)
+{
+    return INTCON & _INTCON_GIE_MASK;
+}
