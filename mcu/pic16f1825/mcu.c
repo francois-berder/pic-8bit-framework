@@ -17,6 +17,7 @@
 #include <assert.h>
 #include <xc.h>
 #include "mcu.h"
+#include "periph_conf.h"
 #include "periph/timer0.h"
 
 #ifndef MAX_INTERRUPT_COUNT
@@ -51,14 +52,15 @@ void mcu_init(void)
 
 void mcu_register_intr_handler(void (*cond)(void), void(*handler)(void*), void *arg)
 {
+    uint8_t ctx;
     assert(intr_count < MAX_INTERRUPT_COUNT);
 
-    mcu_disable_interrupts();
+    __HAL_DISABLE_INTERRUPTS(ctx);
     entries[intr_count].cond = cond;
     entries[intr_count].handler = handler;
     entries[intr_count].arg = arg;
     ++intr_count;
-    mcu_enable_interrupts();
+    __HAL_ENABLE_INTERRUPTS(ctx);
 }
 
 uint32_t mcu_get_clock_frequency(void)

@@ -17,6 +17,7 @@
 #include <assert.h>
 #include <xc.h>
 #include "mcu.h"
+#include "periph_conf.h"
 #include "periph/gpio.h"
 
 #define GPIO_PORT(pin)      ((pin) >> 4)
@@ -89,6 +90,8 @@ void gpio_init_in(uint8_t pin)
 
 void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
 {
+    uint8_t ctx;
+
     /* Interrupt on Change only on port A */
     assert(GPIO_PORT(pin) == 0);
 
@@ -96,7 +99,7 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
 
     gpio_init_in(pin);
 
-    mcu_disable_interrupts();
+    __HAL_DISABLE_INTERRUPTS(ctx);
     switch(trigger) {
     case GPIO_RISING:
         IOCAN &= ~(1U << index);
@@ -119,7 +122,7 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
         mcu_register_intr_handler(gpio_irq_cond, gpio_irq_handler, 0);
     }
     INTCON |= _INTCON_IOCIE_MASK;
-    mcu_enable_interrupts();
+    __HAL_ENABLE_INTERRUPTS(ctx);
 }
 
 uint8_t gpio_read(uint8_t pin)

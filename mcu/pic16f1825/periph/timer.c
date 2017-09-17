@@ -183,8 +183,9 @@ void timer_stop(uint8_t num)
 uint32_t timer_get_tick_count(uint8_t num)
 {
     uint32_t t;
+    uint8_t ctx;
 
-    mcu_disable_interrupts();
+    __HAL_DISABLE_INTERRUPTS(ctx);
     switch (num) {
     case 2:
         t = ticks[0];
@@ -196,14 +197,15 @@ uint32_t timer_get_tick_count(uint8_t num)
         t = ticks[2];
         break;
     }
-    mcu_enable_interrupts();
+    __HAL_ENABLE_INTERRUPTS(ctx);
 
     return t;
 }
 
 void timer_reset_tick_count(uint8_t num)
 {
-    mcu_disable_interrupts();
+    uint8_t ctx;
+    __HAL_DISABLE_INTERRUPTS(ctx);
     switch (num) {
     case 2:
         ticks[0] = 0;
@@ -215,5 +217,5 @@ void timer_reset_tick_count(uint8_t num)
         ticks[2] = 0;
         break;
     }
-    mcu_enable_interrupts();
+    __HAL_ENABLE_INTERRUPTS(ctx);
 }
