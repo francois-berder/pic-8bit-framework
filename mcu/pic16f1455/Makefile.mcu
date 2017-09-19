@@ -1,5 +1,6 @@
 SOURCES += mcu/pic$(CHIP)/mcu.c \
            mcu/pic$(CHIP)/periph/gpio.c \
+           mcu/pic$(CHIP)/periph/pwm.c \
            mcu/pic$(CHIP)/periph/timer.c \
            mcu/pic$(CHIP)/periph/timer0.c \
            mcu/pic$(CHIP)/periph/timer1.c \
