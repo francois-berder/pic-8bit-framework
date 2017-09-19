@@ -105,8 +105,8 @@ uint32_t mcu_get_clock_frequency(void)
 
 void mcu_delay(uint32_t ticks)
 {
-    (void)ticks;
-    /* @todo Not implemented yet */
+    uint32_t now = timer0_get_tick_count();
+    while (timer0_get_tick_count() - now < ticks) {}
 }
 
 void mcu_reset(void)
