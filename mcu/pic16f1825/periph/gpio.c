@@ -23,36 +23,6 @@
 #define GPIO_PORT(pin)      ((pin) >> 4)
 #define GPIO_INDEX(pin)     ((pin) & 0xF)
 
-#define ANSEL(PIN)      (*ports[GPIO_PORT(PIN)].ansel)
-#define PORT(PIN)       (*ports[GPIO_PORT(PIN)].port)
-#define TRIS(PIN)       (*ports[GPIO_PORT(PIN)].tris)
-#define LAT(PIN)        (*ports[GPIO_PORT(PIN)].lat)
-
-struct gpio_regs_t {
-    volatile uint8_t *ansel;
-    volatile uint8_t *port;
-    volatile uint8_t *tris;
-    volatile uint8_t *lat;
-};
-
-static struct gpio_regs_t ports[] = {
-    {
-        &ANSELA,
-        &PORTA,
-        &TRISA,
-        &LATA
-    },
-    {
-        0, 0, 0, 0
-    },
-    {
-        &ANSELC,
-        &PORTC,
-        &TRISC,
-        &LATC
-    }
-};
-
 static uint8_t intr_registered = 0;
 typedef void(*irq_callback_t)(void);
 static volatile irq_callback_t callbacks[6];
@@ -76,15 +46,34 @@ static void gpio_irq_handler(void)
 
 void gpio_init_out(uint8_t pin, uint8_t value)
 {
-    ANSEL(pin) &= ~(1 << GPIO_INDEX(pin));
+    uint8_t index = GPIO_INDEX(pin);
     gpio_write(pin, value);
-    TRIS(pin) &= ~(1 << GPIO_INDEX(pin));
+
+    switch (GPIO_PORT(pin)) {
+    case PORT_A:
+        ANSELA &= ~(1 << index);
+        TRISA &= ~(1 << index);
+        break;
+    case PORT_C:
+        ANSELC &= ~(1 << index);
+        TRISC &= ~(1 << index);
+        break;
+    }
 }
 
 void gpio_init_in(uint8_t pin)
 {
-    ANSEL(pin) &= ~(1 << GPIO_INDEX(pin));
-    TRIS(pin) |= 1 << GPIO_INDEX(pin);
+    uint8_t index = GPIO_INDEX(pin);
+    switch (GPIO_PORT(pin)) {
+    case PORT_A:
+        ANSELA &= ~(1 << index);
+        TRISA |= 1 << index;
+        break;
+    case PORT_C:
+        ANSELC &= ~(1 << index);
+        TRISC |= 1 << index;
+        break;
+    }
 }
 
 void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
@@ -126,18 +115,52 @@ void gpio_init_irq(uint8_t pin, uint8_t trigger, void (*callback)(void))
 
 uint8_t gpio_read(uint8_t pin)
 {
-    return PORT(pin) & (1 << GPIO_INDEX(pin)) ? 1 : 0;
+    uint8_t index = GPIO_INDEX(pin);
+
+    switch (GPIO_PORT(pin)) {
+    case PORT_A:
+        return PORTA & (1 << index) ? 1 : 0;
+    case PORT_C:
+        return PORTC & (1 << index) ? 1 : 0;
+    }
+    return 0;
 }
 
 void gpio_write(uint8_t pin, uint8_t value)
 {
-    if (value)
-        LAT(pin) |= 1 << GPIO_INDEX(pin);
-    else
-        LAT(pin) &= ~(1 << GPIO_INDEX(pin));
+    uint8_t port = GPIO_PORT(pin);
+    uint8_t index = GPIO_INDEX(pin);
+
+    if (value) {
+        switch (port) {
+        case PORT_A:
+            LATA |= 1 << index;
+            break;
+        case PORT_C:
+            LATC |= 1 << index;
+            break;
+        }
+    } else {
+        switch (port) {
+        case PORT_A:
+            LATA &= ~(1 << index);
+            break;
+        case PORT_C:
+            LATC |= ~(1 << index);
+            break;
+        }
+    }
 }
 
 void gpio_toggle(uint8_t pin)
 {
-    LAT(pin) ^= 1 << GPIO_INDEX(pin);
+    uint8_t index = GPIO_INDEX(pin);
+    switch (GPIO_PORT(pin)) {
+    case PORT_A:
+        LATA ^= 1 << index;
+        break;
+    case PORT_C:
+        LATC ^= 1 << index;
+        break;
+    }
 }
