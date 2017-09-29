@@ -2,7 +2,7 @@
 
 This project provides a framework for 8bit PIC microcontrollers to ease development.
 
-It contains abstraction for :
+It contains abstraction for:
   - UART
   - GPIO
   - Watchdog
@@ -11,5 +11,4 @@ It contains abstraction for :
   - Timer 2/4/6
   - EEPROM
 
-For now, only the PIC16F1825 is supported.
-
+For now, only the PIC16F1825 and PIC16F1455 is supported.
