@@ -39,6 +39,20 @@ void mcu_init(void);
 void mcu_register_intr_handler(void (*cond)(void), void (*handler)(void));
 
 /**
+ * @brief Set the clock frequency of the MCU
+ *
+ * Beware that this function does not change the clock frequency. It is
+ * assumed that the clock has already been changed before calling this
+ * function.
+ * This function is there to store the clock frequency such that any
+ * subsequent calls to mcu_get_clock_frequency in peripherals will
+ * return @p clock_freq.
+ *
+ * @param[in] clock_freq
+ */
+void mcu_set_clock_frequency(uint32_t clock_freq);
+
+/**
  * @return Clock frequency of the MCU. If frequency is unknown  0 is returned.
  */
 uint32_t mcu_get_clock_frequency(void);
