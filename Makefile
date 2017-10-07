@@ -15,10 +15,13 @@ all: release
 release: framework
 debug: framework
 
-framework: $(SOURCES)
+.PHONY: framework
+framework: $(OUTDIR)/framework.lpp
+
+$(OUTDIR)/framework.lpp: $(SOURCES)
 	@mkdir -p $(OBJDIR)
 	@mkdir -p $(OUTDIR)
-	xc8 --chip=$(CHIP) --output=lpp -o$@.lpp --warn=9 $(CFLAGS) \
+	xc8 --chip=$(CHIP) --output=lpp -oframework.lpp --warn=9 $(CFLAGS) \
 		--objdir=$(OBJDIR) --outdir=$(OUTDIR) \
 		$(SOURCES) $(INCLUDES) $(if $(DEBUG),,-DNDEBUG)
 
