@@ -1,4 +1,4 @@
-### Framework for 8bit PIC MCU
+### Framework for 8bit PIC MCU [![Build Status](https://api.travis-ci.org/francois-berder/pic-8bit-framework.svg?branch=master)](https://travis-ci.org/francois-berder/pic-8bit-framework)
 
 This project provides a framework for 8bit PIC microcontrollers to ease development.
 
