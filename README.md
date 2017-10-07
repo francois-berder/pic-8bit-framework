@@ -11,4 +11,4 @@ It contains abstraction for:
   - Timer 2/4/6
   - EEPROM
 
-For now, only the PIC16F1825 and PIC16F1455 is supported.
+For now, only the PIC16F1825 and PIC16F1455 are supported.
