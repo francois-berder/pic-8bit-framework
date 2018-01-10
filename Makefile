@@ -7,16 +7,13 @@ MCU := pic$(CHIP)
 include mcu/$(MCU)/Makefile.mcu
 
 INCLUDES := -Imcu/include -Imcu/include/periph -Imcu/$(MCU)
-OBJDIR := obj/$(MCU)/
-OUTDIR := bin/$(MCU)/
+OBJDIR := obj/$(MCU)
+OUTDIR := bin/$(MCU)
 debug: DEBUG = 1
 
 all: release
-release: framework
-debug: framework
-
-.PHONY: framework
-framework: $(OUTDIR)/framework.lpp
+release: $(OUTDIR)/framework.lpp
+debug: $(OUTDIR)/framework.lpp
 
 $(OUTDIR)/framework.lpp: $(SOURCES)
 	@mkdir -p $(OBJDIR)
