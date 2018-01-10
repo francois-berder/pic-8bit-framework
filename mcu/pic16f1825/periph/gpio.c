@@ -149,7 +149,7 @@ void gpio_write(uint8_t pin, uint8_t value)
             LATA &= ~(1 << index);
             break;
         case PORT_C:
-            LATC |= ~(1 << index);
+            LATC &= ~(1 << index);
             break;
         }
     }
