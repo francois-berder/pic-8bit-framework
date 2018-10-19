@@ -23,10 +23,13 @@
 #include "periph/timer.h"
 
 void pwm_configure(uint8_t num, uint8_t timer_num, uint8_t timer_period,
-                   uint8_t timer_prescaler, uint8_t timer_postcaler)
+                   uint8_t timer_prescaler, uint8_t timer_postcaler,
+                   uint8_t active_high)
 {
     assert(num == 1 || num == 2);
     assert(timer_num == 2);
+
+    (void)active_high;
 
     switch (num) {
     case 1:

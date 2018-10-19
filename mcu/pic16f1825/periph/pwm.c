@@ -25,7 +25,8 @@
 static uint8_t pwm_timer[4];
 
 void pwm_configure(uint8_t num, uint8_t timer_num, uint8_t timer_period,
-                   uint8_t timer_prescaler, uint8_t timer_postcaler)
+                   uint8_t timer_prescaler, uint8_t timer_postcaler,
+                   uint8_t active_high)
 {
     assert(num != 0 && num <= 4);
 
@@ -34,7 +35,10 @@ void pwm_configure(uint8_t num, uint8_t timer_num, uint8_t timer_period,
         CCPR1L = 0;
         CCP1CON &= ~_CCP1CON_DC1B_MASK;
         CCP1CON &= ~_CCP1CON_CCP1M_MASK;
-        CCP1CON |= 0b1100 << _CCP1CON_CCP1M_POSITION;
+        if (active_high)
+            CCP1CON |= 0b1100 << _CCP1CON_CCP1M_POSITION;
+        else
+            CCP1CON |= 0b1111 << _CCP1CON_CCP1M_POSITION;
         CCPTMRS &= ~_CCPTMRS_C1TSEL_MASK;
         if (timer_num == 4)
             CCPTMRS |= 0b01 << _CCPTMRS_C1TSEL_POSITION;
@@ -45,7 +49,10 @@ void pwm_configure(uint8_t num, uint8_t timer_num, uint8_t timer_period,
         CCPR2L = 0;
         CCP2CON &= ~_CCP2CON_DC2B_MASK;
         CCP2CON &= ~_CCP2CON_CCP2M_MASK;
-        CCP2CON |= 0b1100 << _CCP2CON_CCP2M_POSITION;
+        if (active_high)
+            CCP2CON |= 0b1100 << _CCP2CON_CCP2M_POSITION;
+        else
+            CCP2CON |= 0b1111 << _CCP2CON_CCP2M_POSITION;
         CCPTMRS &= ~_CCPTMRS_C2TSEL_MASK;
         if (timer_num == 4)
             CCPTMRS |= 0b01 << _CCPTMRS_C2TSEL_POSITION;

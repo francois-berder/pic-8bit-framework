@@ -32,9 +32,11 @@
  * @param[in] timer_period
  * @param[in] timer_prescaler
  * @param[in] timer_postcaler
+ * @param[in] active_high
  */
 void pwm_configure(uint8_t num, uint8_t timer_num, uint8_t timer_period,
-                   uint8_t timer_prescaler, uint8_t timer_postcaler);
+                   uint8_t timer_prescaler, uint8_t timer_postcaler,
+                   uint8_t active_high);
 
 /**
  * @brief Set duty cycle of PWM module
